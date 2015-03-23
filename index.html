@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="mockTrader">
+  <head>
+    <title>Demo Trading Application</title>
+    <script src="lib/angular/angular.js"></script>
+    <script src="src/app.js"/></script>
+    <script src="src/trade/js/controller.js"/></script>
+    <script src="src/trade/js/services.js"/></script>
+    <script src="src/order/js/controller.js"/></script>
+    <script src="src/order/js/services.js"/></script>
+    <script src="src/chart/js/controller.js"/></script>
+    <script src="src/chart/js/services.js"/></script>
+    <link rel="stylesheet" type="text/css" href="src/css/app.css"></link>
+  </head>
+  <body>
+    <!--[if lt IE 9]>
+      <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'>
+        <p> This needs a newer browser to run. Please download one using the below links </p>
+        <div> <a href="https://www.google.com/chrome/browser/desktop/"> Google Chrome </a></div>
+        <div> <a href="https://www.mozilla.org/en-US/firefox/new/"/> Firefox </a></div>
+      </div>
+    <![endif]-->
+    <!--[if gt IE 9]> -->
+    <header>
+      <div class="app-title">
+        <h1> Demo Trading Application </h1>
+      </div>
+      <div class="user-menu">
+        {{ username }}
+      </div>
+    </header>
+    <div ng-view> </div>
+    <footer>
+    </footer>
+  </body>
+</html>
