@@ -4,13 +4,11 @@
     <title>Demo Trading Application</title>
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular-route/angular-route.js"></script>
+    <script src="lib/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="src/common/js/tab.js"/></script>
+    <script src="src/trade/js/trade.js"/></script>
+    <script src="src/order/js/order.js"/></script>
     <script src="src/app.js"/></script>
-    <script src="src/trade/js/controller.js"/></script>
-    <script src="src/trade/js/services.js"/></script>
-    <script src="src/order/js/controller.js"/></script>
-    <script src="src/order/js/services.js"/></script>
-    <script src="src/chart/js/controller.js"/></script>
-    <script src="src/chart/js/services.js"/></script>
     <link rel="stylesheet" type="text/css" href="src/css/app.css"></link>
   </head>
   <body>
@@ -30,7 +28,46 @@
         {{ username }}
       </div>
     </header>
-    <div ng-view> </div>
+    <div ng-controller='TradeController as tradeController'>
+      <div ng-controller='TabController as tabController' class='tab-container'>
+        <div class='tab-header' role='navigation'>
+          <ul class='nav nav-tabs'>
+            <li ng-repeat='tab in tabs'
+              role='presentation'
+              ng-class='{active: isActive(tab.url)}'
+              ng-click='onTabClick(tab)'>
+              <div class='tab-title'>
+                {{ tab.title }}
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class='tab-content row'>
+          <div class='tab-pane'
+            ng-show='isActive("tab.url.options")'>
+            <div trade> </div>
+          </div>
+          <div class='tab-pane'
+            ng-show='isActive("tab.url.orders")'>
+            <div new-order> </div>
+          </div>
+          <div class='tab-pane'
+              ng-show='isActive("tab.url.charts")'>
+            Various charts will be displayed here.
+            Currently under construction. Please visit later.
+          </div>
+          <div class='tab-pane'
+            ng-show='isActive("tab.url.account.summary")'>
+            The users account summary - balance, margin balance etc will be displayed here
+            Currently under construction. Please visit later.
+          </div>
+          <div class='tab-pane'
+            ng-show='isActive("tab.url.reports")'>
+            Various reports will be displayed here.
+            Currently under construction. Please visit later.
+          </div>
+      </div>
+    </div>
     <footer>
     </footer>
   </body>

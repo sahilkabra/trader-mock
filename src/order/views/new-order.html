@@ -1,0 +1,68 @@
+<form class='order-container' ng-controller='OrderController as orderController'>
+  <div class='table'>
+    <div class='row'>
+      <div class='col'>
+        <span> Currency </span>
+      </div>
+      <div class='col'>
+        <span>
+         <select ng-model='order.market'
+           ng-options='currency as currency.code for currency in currencyPairs'>
+         </select>
+        </span>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col'>
+        <input type='radio' ng-model='order.type' name='orderType' value='market'> Market
+      </div>
+      <div class='col'>
+        <input type='radio' ng-model='order.type' name='orderType' value='limit'> Limit
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col'>
+        <input type='radio' ng-model='order.transaction' name='transaction' value='buy'> Buy
+      </div>
+      <div class='col'>
+        <input type='radio' ng-model='order.transaction' name='transaction' value='sell'> Sell
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col'>
+        <span> Units </span>
+      </div>
+      <div class='col'>
+        <input type='number' ng-model='order.units' required>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col'>
+        <span> Quote </span>
+      </div>
+      <div class='col'>
+        <input type='text' ng-model='order.quote' ng-disabled='!isLimitOrder(order)'>
+      </div>
+    </div>
+    <div class='row' ng-show='isLimitOrder(order)'>
+      <div class='col'>
+        <span > Expire Date </span>
+      </div>
+      <div class='col'>
+        <input type='datetime-local' placeholder="yyyy-MM-ddTHH:mm:ss"
+        ng-model='order.expires'>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col'>
+        <input type='button' ng-click='placeOrder(order)' value='Place Order'>
+      </div>
+      <div class='col'>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
+

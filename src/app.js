@@ -1,6 +1,6 @@
 var app = angular.module('mockTrader', [
   'ngRoute',
-  'tradeController', 'chartController','orderController'
+  'TabModule', 'OrderModule', 'TradeModule'
 ]);
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -22,6 +22,19 @@ app.config(['$routeProvider', function($routeProvider) {
   });
 }]);
 
-app.run(function($rootScope) {
+app.run(['$rootScope', 'OrderService',
+    function($rootScope, orderService) {
   $rootScope.username = "Demo User";
-});
+  var newOrder = {
+    market: {code: 'USD/JPY'},
+    type: 'market',
+    transaction: 'buy',
+    units: 1,
+    quote: 1.80
+  };
+
+  orderService.placeOrder(newOrder);
+}]);
+
+app.controller('TradeController', ['$scope', function($scope) {
+}]);

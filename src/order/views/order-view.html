@@ -1,0 +1,30 @@
+<div class='order-view table' ng-controller='OrderController as orderController'>
+  <table>
+    <thead>
+    <tr>
+      <th>Order Id </th>
+      <th>Market</th>
+      <th>Transaction</th>
+      <th>Type</th>
+      <th>Units</th>
+      <th>Price</th>
+      <th>Current</th>
+      <th>Expires</th>
+      <th>Cancel</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat='order in orders'>
+      <td> {{ order.id }} </td>
+      <td> {{ order.market.code }} </td>
+      <td> {{ order.transaction }} </td>
+      <td> {{ order.type }} </td>
+      <td> {{ order.units }} </td>
+      <td> {{ order.quote }} </td>
+      <td></td>
+      <td> {{ order.expires | date: 'yyyy-mm-dd HH:mm'}} </td>
+      <td><input type='button' ng-click='cancelOrder(order)' value='Cancel'></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
