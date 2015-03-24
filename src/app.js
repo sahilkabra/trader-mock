@@ -1,26 +1,7 @@
 var app = angular.module('mockTrader', [
   'ngRoute',
-  'TabModule', 'OrderModule', 'TradeModule'
+  'TabModule', 'OrderModule', 'TradeModule', 'QuoteModule'
 ]);
-
-app.config(['$routeProvider', function($routeProvider) {
-  $routeProvider
-  .when('/newtrade', {
-    templateUrl: 'src/trade/views/newtrade.html',
-    controller: 'tradeController'
-  })
-  .when('/chart/:currency-pair', {
-    templateUrl: 'src/chart/views/chart.html',
-    controller: 'chartController'
-  })
-  .when('/orders', {
-    templateUrl: 'src/order/views/orders.html',
-    controller: 'orderController'
-  })
-  .otherwise({
-    redirectTo: '/error.html'
-  });
-}]);
 
 app.run(['$rootScope', 'OrderService',
     function($rootScope, orderService) {
@@ -33,7 +14,7 @@ app.run(['$rootScope', 'OrderService',
     quote: 1.80
   };
 
-  orderService.placeOrder(newOrder);
+ // orderService.placeOrder(newOrder);
 }]);
 
 app.controller('TradeController', ['$scope', function($scope) {

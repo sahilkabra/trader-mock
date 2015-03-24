@@ -32,6 +32,8 @@ orderModule.controller('OrderController',
   }, {
     code: 'USD/JPY'
   }, {
+    code: 'AUD/USD'
+  }, {
     code: 'GBP/USD'
   }];
 
@@ -64,6 +66,30 @@ orderModule.controller('OrderController',
 
   $scope.$on('LocalStorageModule.notification.removeItem', function() {
     $scope.orders = orderService.getOrders();
+  });
+
+  $scope.$on('OrderService.newQuote', function() {
+    var quote = orderService.quote;
+    var market, index;
+    if (quote) {
+      for (index = 0; index < $scope.currencyPairs.length; index++) {
+       if ($scope.currencyPairs[index].code === quote.market) {
+         market = $scope.currencyPairs[index];
+         break;
+       }
+      }
+      var currentQuote = quote.transaction === 'buy'? quote.buy : quote.sell;
+      $scope.order = {
+        market: market,
+        type: 'market',
+        transaction: quote.transaction,
+        units: quote.units,
+        quote: currentQuote,
+        expire: new Date()
+      }
+    } else {
+      $scope.order = null;
+    }
   });
 }]);
 
@@ -99,6 +125,11 @@ orderModule.factory('OrderService',
         }
       }
     },
+
+    newQuote: function(quote) {
+      this.quote = quote;
+      $rootScope.$broadcast('OrderService.newQuote');
+    }
   };
   return service;
 }]);

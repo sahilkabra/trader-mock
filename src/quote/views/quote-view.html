@@ -1,0 +1,42 @@
+<div class="quote-container" ng-controller='QuoteController as quoteController'>
+  <div ng-repeat='quote in quotes'>
+    <div class="table">
+      <div class="row">
+        <div class='quote-market col span-2'>
+          <span> {{ quote.market }} </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class='quote-low col'>
+          <span> {{ quote.low }} </span>
+        </div>
+        <div class='quote-high col'>
+          <span> {{ quote.high }} </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class='quote-sell col'>
+          <span> {{ quote.sell }} </span>
+          <label ng-click='toggleNewOrder(quote, "sell")'> Sell </label>
+        </div>
+        <div class='quote-buy col'>
+          <span> {{ quote.buy }} </span>
+          <label ng-click='toggleNewOrder(quote, "buy")'> Buy </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class='quote-units col'>
+          <input type='number' ng-model='quote.unit'>
+        </div>
+      </div>
+      <div class="row" ng-show='quote.newOrderShown'>
+        <div class='quote-order col'>
+            <div new-order> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="add-quote">
+    <label> Add a new quote </label>
+  </div>
+</div>

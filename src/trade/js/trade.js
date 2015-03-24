@@ -1,4 +1,4 @@
-var tradeModule = angular.module('TradeModule', []);
+var tradeModule = angular.module('TradeModule', ['OrderModule', 'QuoteModule']);
 
 tradeModule.directive('trade', function() {
   return {
