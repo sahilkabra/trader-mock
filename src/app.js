@@ -7,7 +7,7 @@ app.run(['$rootScope', 'OrderService',
     function($rootScope, orderService) {
   $rootScope.username = "Demo User";
   var newOrder = {
-    market: {code: 'USD/JPY'},
+    market: {code: 'AUD/USD'},
     type: 'market',
     transaction: 'buy',
     units: 1,

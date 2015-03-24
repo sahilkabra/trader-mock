@@ -88,7 +88,7 @@ orderModule.controller('OrderController',
         expire: new Date()
       }
     } else {
-      $scope.order = null;
+      $scope.order = {};
     }
   });
 }]);
@@ -105,7 +105,7 @@ orderModule.factory('OrderService',
     placeOrder: function(order) {
       var orders = this.getOrders();
       if (!orders) orders = [];
-      order.id = orders.length + 1;
+      order.id = Math.round(Math.random()*10000000);
       orders.push(order);
       localStorageService.set('orders', orders);
       $rootScope.$broadcast('LocalStorageModule.notification.setItem',
@@ -119,7 +119,8 @@ orderModule.factory('OrderService',
       for (index = 0; index < orders.length; index++) {
         order = orders[index];
         if (order.id === cancelOrder.id) {
-          localStorageService.set('orders', orders.splice(index,1));
+          orders.splice(index,1);
+          localStorageService.set('orders', orders);
           $rootScope.$broadcast('LocalStorageModule.notification.removeItem',
             {key: 'orders', newvalue: order});
         }
