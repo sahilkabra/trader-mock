@@ -1,5 +1,5 @@
 var app = angular.module('mockTrader', [
-  'ngRoute',
+  'ui.bootstrap',
   'TabModule', 'OrderModule', 'TradeModule', 'QuoteModule'
 ]);
 

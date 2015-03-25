@@ -1,16 +1,21 @@
 <!doctype html>
 <html ng-app="mockTrader">
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Demo Trading Application</title>
     <script src="lib/angular/angular.js"></script>
-    <script src="lib/angular-route/angular-route.js"></script>
     <script src="lib/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="src/common/js/tab.js"/></script>
     <script src="src/trade/js/trade.js"/></script>
     <script src="src/order/js/order.js"/></script>
     <script src="src/quote/js/quote.js"/></script>
     <script src="src/app.js"/></script>
-    <link rel="stylesheet" type="text/css" href="src/css/app.css"></link>
+    <script src="lib/jquery/dist/jquery.min.js"/></script>
+    <link rel="stylesheet" type="text/css" href="src/css/app.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css">
   </head>
   <body>
     <!--[if lt IE 9]>
@@ -21,55 +26,61 @@
       </div>
     <![endif]-->
     <!--[if gt IE 9]> -->
-    <header>
-      <div class="app-title">
-        <h1> Demo Trading Application </h1>
-      </div>
-      <div class="user-menu">
-        {{ username }}
-      </div>
-    </header>
-    <div ng-controller='TradeController as tradeController'>
-      <div ng-controller='TabController as tabController' class='tab-container'>
-        <div class='tab-header' role='navigation'>
-          <ul class='nav nav-tabs'>
-            <li ng-repeat='tab in tabs'
-              role='presentation'
-              ng-class='{active: isActive(tab.url)}'
-              ng-click='onTabClick(tab)'>
-              <div class='tab-title'>
-                {{ tab.title }}
-              </div>
-            </li>
+
+    <!-- The top navigation bar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Demo</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
           </ul>
         </div>
-        <div class='tab-content row'>
-          <div class='tab-pane'
-            ng-show='isActive("tab.url.options")'>
-            <div trade> </div>
-          </div>
-          <div class='tab-pane'
-            ng-show='isActive("tab.url.orders")'>
-            <div new-order> </div>
-          </div>
-          <div class='tab-pane'
-              ng-show='isActive("tab.url.charts")'>
-            Various charts will be displayed here.
-            Currently under construction. Please visit later.
-          </div>
-          <div class='tab-pane'
-            ng-show='isActive("tab.url.account.summary")'>
-            The users account summary - balance, margin balance etc will be displayed here
-            Currently under construction. Please visit later.
-          </div>
-          <div class='tab-pane'
-            ng-show='isActive("tab.url.reports")'>
-            Various reports will be displayed here.
-            Currently under construction. Please visit later.
-          </div>
       </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row" ng-controller='TradeController as tradeController'>
+        <div ng-controller='TabController as tabController' class='tab-container'>
+          <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+              <li ng-repeat='tab in tabs' ng-class='{active: isActive(tab.url)}'
+                  ng-click='onTabClick(tab)'>
+                <a href="#" class='tab-title'>
+                  {{ tab.title }}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-sm-offset-2 main">
+            <h1 class="page-header">{{ currentTab.title }} </h1>
+            <div class='tab-pane' ng-show='isActive("tab.url.options")'>
+              <div trade> </div>
+            </div>
+            <div class='tab-pane' ng-show='isActive("tab.url.orders")'>
+              <div new-order></div>
+            </div>
+            <div class='tab-pane' ng-show='isActive("tab.url.account.summary")'>
+              The users account summary - balance, margin balance etc will be displayed here
+              Currently under construction. Please visit later.
+            </div>
+            <div class='tab-pane' ng-show='isActive("tab.url.charts")'>
+              Various charts will be displayed here.
+              Currently under construction. Please visit later.
+            </div>
+            <div class='tab-pane' ng-show='isActive("tab.url.reports")'>
+              Trade Reports will be displayed here.
+              Currently under construction. Please visit later.
+            </div>
+         </div>
+         </div>
+       </div>
+     </div>
     </div>
-    <footer>
-    </footer>
   </body>
 </html>
