@@ -1,3 +1,4 @@
+'use strict';
 var app = angular.module('TabModule', []);
 
 app.controller('TabController', ['$scope', function($scope) {

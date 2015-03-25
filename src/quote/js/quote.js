@@ -1,3 +1,4 @@
+'use strict';
 var quoteModule = angular.module('QuoteModule', ['OrderModule']);
 
 quoteModule.directive('quoteView', function() {

@@ -1,3 +1,4 @@
+'use strict';
 var orderModule = angular.module('OrderModule', ['LocalStorageModule']);
 
 orderModule.config(['localStorageServiceProvider',
