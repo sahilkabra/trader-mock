@@ -79,6 +79,10 @@ orderModule.controller('OrderController',
     orderService.closeOrder(order);
   };
 
+  $scope.isClosedOrder = function(order) {
+    return order.status === 'Closed';
+  };
+
   $scope.$on('LocalStorageModule.notification.setItem', function() {
     $scope.orders = orderService.getOrders();
   });

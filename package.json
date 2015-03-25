@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "jshint **.js"
+    "lint": ".node_modules/.bin/jshint **.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/sahilkabra/trader-mock",
   "devDependencies": {
-    "jsHint": "latest"
+    "jshint": "^2.6.3"
   }
 }

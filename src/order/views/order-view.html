@@ -28,8 +28,10 @@
           <td></td>
           <td> {{ order.expires | date: 'yyyy-mm-dd HH:mm'}} </td>
           <td>
-            <input type='button' ng-click='cancelOrder(order)' ng-show='isLimitOrder(order)' value='Cancel'>
-            <input type='button' ng-click='closeOrder(order)' ng-show='!isLimitOrder(order)' value='Close'>
+            <input type='button' class='btn btn-danger'
+              ng-click='cancelOrder(order)' ng-show='isLimitOrder(order)' value='Cancel'>
+            <input type='button' class='btn btn-success' ng-disabled='isClosedOrder(order)'
+              ng-click='closeOrder(order)' ng-show='!isLimitOrder(order)' value='Close'>
           </td>
         </tr>
       </tbody>

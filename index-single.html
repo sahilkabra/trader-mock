@@ -1,0 +1,319 @@
+<!doctype html>
+<html ng-app="mockTrader">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo Trading Application</title>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="src/common/js/tab.js"/></script>
+    <script src="src/trade/js/trade.js"/></script>
+    <script src="src/order/js/order.js"/></script>
+    <script src="src/quote/js/quote.js"/></script>
+    <script src="src/app.js"/></script>
+    <script src="lib/jquery/dist/jquery.min.js"/></script>
+    <link rel="stylesheet" type="text/css" href="src/css/app.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css">
+  </head>
+  <body>
+    <!--[if lt IE 9]>
+      <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'>
+        <p> This needs a newer browser to run. Please download one using the below links </p>
+        <div> <a href="https://www.google.com/chrome/browser/desktop/"> Google Chrome </a></div>
+        <div> <a href="https://www.mozilla.org/en-US/firefox/new/"/> Firefox </a></div>
+      </div>
+    <![endif]-->
+    <!--[if gt IE 9]> -->
+
+    <!-- The top navigation bar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Demo</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row" ng-controller='TradeController as tradeController'>
+        <div ng-controller='TabController as tabController' class='tab-container'>
+          <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+              <li ng-repeat='tab in tabs' ng-class='{active: isActive(tab.url)}'
+                  ng-click='onTabClick(tab)'>
+                <a href="#" class='tab-title'>
+                  {{ tab.title }}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-sm-offset-2 main">
+            <h1 class="page-header">{{ currentTab.title }} </h1>
+            <div class='tab-pane' ng-show='isActive("tab.url.options")'>
+              <div class='trade-view-container'>
+                <div class="quote-container" ng-controller='QuoteController as quoteController'>
+                  <div class="row placeholders">
+                    <div ng-repeat='quote in quotes'>
+                      <div class="col-sm-4">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4> {{ quote.market }} </h4>
+                          </div>
+                          <div class="panel-body">
+                            <h6> L: {{ quote.low }} | H: {{ quote.high }} </h6>
+                            Units: <input type='number' ng-model='quote.units'>
+                            <h3>
+                              <button class="btn btn-primary" ng-click='toggleNewOrder(quote, "sell")'>
+                               {{ quote.sell }} Sell
+                              </button>
+                              <button class="btn btn-primary" ng-click='toggleNewOrder(quote, "buy")'>
+                                {{ quote.buy }} Buy
+                              </button>
+                            </h3>
+                          </div>
+                          <div ng-show='quote.newOrderShown'>
+                            <script type="text/ng-template" id="myModalContent.html">
+                              <div class="modal-header">
+                                  <h3 class="modal-title">New Order</h3>
+                              </div>
+                              <div class="modal-body">
+                                <div class='order-container' ng-controller='OrderController as orderController'>
+                                  <div class="panel panel-default">
+                                    <table class="table">
+                                      <tbody>
+                                      <tr scope="row">
+                                        <td class="text-right">Market</td>
+                                        <td class="text-justified">
+                                          <div class="btn-group" dropdown is-open='status.isopen'>
+                                            <button class="btn btn-default dropdown-toggle" type="button"
+                                              class="btn btn-primary dropdown-toggle" dropdown-toggle>
+                                              {{ order.market.code }}
+                                              <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                              <li ng-repeat='currency in currencyPairs' ng-click='selectMarket(currency)'
+                                                role="presentation">
+                                                <a role="menuitem" tabindex="-1" href="#"> {{ currency.code }} </a>
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-right">
+                                          <input type='radio' ng-model='order.type' name='orderType' value='market'> Market Order
+                                        </td>
+                                        <td class="text-justified">
+                                          <input type='radio' ng-model='order.type' name='orderType' value='limit'> Limit Order
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-right">
+                                        <input type='radio' ng-model='order.transaction' name='transaction' value='buy'> Buy
+                                        </td>
+                                        <td class="text-justified">
+                                        <input type='radio' ng-model='order.transaction' name='transaction' value='sell'> Sell
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-right">
+                                          <span> Units </span>
+                                        </td>
+                                        <td class="text-justified">
+                                          <input type='number' ng-model='order.units' required>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-right">
+                                          <span> Quote </span>
+                                        </td>
+                                        <td class="text-justified">
+                                          <input type='text' ng-model='order.quote' ng-disabled='!isLimitOrder(order)'>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="text-right">
+                                          <span> Expires </span>
+                                        </td>
+                                        <td class="text-justified" style="width:50%">
+                                          <input type='datetime-local' placeholder="yyyy-MM-ddTHH:mm:ss"
+                                            ng-model='order.expires'>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td colspan=2 class="text-center">
+                                          <input type='button'
+                                            class="btn btn-success" ng-click='placeOrder(order)' value='Place Order'>
+                                        </td>
+                                      </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                              </div>
+                            </script>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4> Add new Quote </h4>
+                        </div>
+                        <div class="panel-body">
+                          <img src="lib/images/add.png"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='tab-pane' ng-show='isActive("tab.url.orders")'>
+              <div class='order-container' ng-controller='OrderController as orderController'>
+                <div class="panel panel-default">
+                  <table class="table">
+                    <tbody>
+                    <tr scope="row">
+                      <td class="text-right">Market</td>
+                      <td class="text-justified">
+                        <div class="btn-group" dropdown is-open='status.isopen'>
+                          <button class="btn btn-default dropdown-toggle" type="button"
+                            class="btn btn-primary dropdown-toggle" dropdown-toggle>
+                            {{ order.market.code }}
+                            <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li ng-repeat='currency in currencyPairs' ng-click='selectMarket(currency)'
+                              role="presentation">
+                              <a role="menuitem" tabindex="-1" href="#"> {{ currency.code }} </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">
+                        <input type='radio' ng-model='order.type' name='orderType' value='market'> Market Order
+                      </td>
+                      <td class="text-justified">
+                        <input type='radio' ng-model='order.type' name='orderType' value='limit'> Limit Order
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">
+                      <input type='radio' ng-model='order.transaction' name='transaction' value='buy'> Buy
+                      </td>
+                      <td class="text-justified">
+                      <input type='radio' ng-model='order.transaction' name='transaction' value='sell'> Sell
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">
+                        <span> Units </span>
+                      </td>
+                      <td class="text-justified">
+                        <input type='number' ng-model='order.units' required>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">
+                        <span> Quote </span>
+                      </td>
+                      <td class="text-justified">
+                        <input type='text' ng-model='order.quote' ng-disabled='!isLimitOrder(order)'>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-right">
+                        <span> Expires </span>
+                      </td>
+                      <td class="text-justified" style="width:50%">
+                        <input type='datetime-local' placeholder="yyyy-MM-ddTHH:mm:ss"
+                          ng-model='order.expires'>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan=2 class="text-center">
+                          <input type='button'
+                            class="btn btn-success" ng-click='placeOrder(order)' value='Place Order'>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class='tab-pane' ng-show='isActive("tab.url.account.summary")'>
+              The users account summary - balance, margin balance etc will be displayed here
+              Currently under construction. Please visit later.
+            </div>
+            <div class='tab-pane' ng-show='isActive("tab.url.charts")'>
+              Various charts will be displayed here.
+              Currently under construction. Please visit later.
+            </div>
+            <div class='tab-pane' ng-show='isActive("tab.url.reports")'>
+              Trade Reports will be displayed here.
+              Currently under construction. Please visit later.
+            </div>
+           </div>
+         </div>
+       </div>
+      <div class='order-view table' ng-controller='OrderController as orderController'>
+        <h4 class="sub-header"> My Orders </h4>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Order Id </th>
+              <th>Market</th>
+              <th>Transaction</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Units</th>
+              <th>Price</th>
+              <th>Current</th>
+              <th>Expires</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat='order in orders'>
+                <td> {{ order.id }} </td>
+                <td> {{ order.market.code }} </td>
+                <td> {{ order.transaction }} </td>
+                <td> {{ order.status }} </td>
+                <td> {{ order.type }} </td>
+                <td> {{ order.units }} </td>
+                <td> {{ order.quote }} </td>
+                <td></td>
+                <td> {{ order.expires | date: 'yyyy-mm-dd HH:mm'}} </td>
+                <td>
+                  <input type='button' class='btn btn-danger'
+                    ng-click='cancelOrder(order)' ng-show='isLimitOrder(order)' value='Cancel'>
+                  <input type='button' class='btn btn-success' ng-disabled='isClosedOrder(order)'
+                    ng-click='closeOrder(order)' ng-show='!isLimitOrder(order)' value='Close'>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+     </div>
+    </div>
+  </body>
+</html>
