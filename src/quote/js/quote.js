@@ -8,8 +8,9 @@ quoteModule.directive('quoteView', function() {
 });
 
 quoteModule.controller('QuoteController',
-    ['$scope', 'QuoteService', 'OrderService',
-    function($scope, quoteService, orderService) {
+    ['$scope', '$modal',
+      'QuoteService', 'OrderService',
+    function($scope, $modal, quoteService, orderService) {
   $scope.quotes = [{
     market: 'EUR/USD',
     low: '1.2294',
@@ -30,16 +31,33 @@ quoteModule.controller('QuoteController',
 
   $scope.currentQuote = {};
   $scope.toggleNewOrder = function(quote, transaction) {
-    quote.newOrderShown = transaction !== $scope.currentQuote.transaction ||
-     !quote.newOrderShown;
-    if (quote.newOrderShown) {
-      quote.transaction = transaction;
-      $scope.currentQuote = quote;
-      orderService.newQuote(quote);
-    } else {
-      $scope.currentQuote = {};
-      orderService.newQuote();
-    }
+    quote.transaction = transaction;
+    $scope.currentQuote = quote;
+    orderService.newQuote(quote);
+    (function() {
+      $scope.open();
+    })();
+  };
+
+  $scope.open = function() {
+    var modalInstance = $modal.open({
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: ''
+    });
+  };
+}]);
+
+
+quoteModule.controller('ModalInstanceCtrl',
+   ['$scope', '$modalInstance',
+    function ($scope, $modalInstance) {
+  $scope.ok = function () {
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
   };
 }]);
 

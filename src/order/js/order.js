@@ -52,7 +52,8 @@ orderModule.controller('OrderController',
     transaction: 'buy',
     units: 1,
     quote: 1.80,
-    expires: new Date()
+    expires: new Date(),
+    status: 'Waiting'
   };
 
   $scope.selectMarket = function(currency) {
@@ -71,6 +72,10 @@ orderModule.controller('OrderController',
 
   $scope.cancelOrder = function(order) {
     orderService.cancelOrder(order);
+  };
+
+  $scope.closeOrder = function(order) {
+    orderService.closeOrder(order);
   };
 
   $scope.$on('LocalStorageModule.notification.setItem', function() {
@@ -106,6 +111,7 @@ orderModule.controller('OrderController',
   });
 }]);
 
+
 //services
 orderModule.factory('OrderService',
    ['$rootScope', 'localStorageService',
@@ -119,10 +125,15 @@ orderModule.factory('OrderService',
       var orders = this.getOrders();
       if (!orders) orders = [];
       order.id = Math.round(Math.random()*10000000);
+      order.status = this.isLimitOrder(order)? 'Waiting' : 'Executed';
       orders.push(order);
       localStorageService.set('orders', orders);
       $rootScope.$broadcast('LocalStorageModule.notification.setItem',
         {key: 'orders', newvalue: order});
+    },
+
+    isLimitOrder: function(order) {
+      return order.type === 'limit';
     },
 
     cancelOrder: function(cancelOrder) {
@@ -138,6 +149,22 @@ orderModule.factory('OrderService',
             {key: 'orders', newvalue: order});
         }
       }
+    },
+
+    closeOrder: function(closeOrder) {
+      var orders = this.getOrders();
+      var index = 0;
+      var order;
+      for (index = 0; index < orders.length; index++) {
+        order = orders[index];
+        if (order.id === closeOrder.id) {
+          order.status = 'Closed';
+          break;
+        }
+      }
+      localStorageService.set('orders', orders);
+      $rootScope.$broadcast('LocalStorageModule.notification.setItem',
+        {key: 'orders', newvalue: order});
     },
 
     newQuote: function(quote) {

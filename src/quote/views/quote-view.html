@@ -10,16 +10,27 @@
             <h6> L: {{ quote.low }} | H: {{ quote.high }} </h6>
             Units: <input type='number' ng-model='quote.units'>
             <h3>
-              <span class="label label-primary" ng-click='toggleNewOrder(quote, "sell")'>
+              <button class="btn btn-primary" ng-click='toggleNewOrder(quote, "sell")'>
                {{ quote.sell }} Sell
-              </span>
-              <span class="label label-info" ng-click='toggleNewOrder(quote, "buy")'>
+              </button>
+              <button class="btn btn-primary" ng-click='toggleNewOrder(quote, "buy")'>
                 {{ quote.buy }} Buy
-              </span>
+              </button>
             </h3>
           </div>
           <div ng-show='quote.newOrderShown'>
-            <div new-order> </div>
+            <script type="text/ng-template" id="myModalContent.html">
+              <div class="modal-header">
+                  <h3 class="modal-title">New Order</h3>
+              </div>
+              <div class="modal-body">
+                <div new-order> </div>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-primary" ng-click="ok()">OK</button>
+                  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+              </div>
+            </script>
           </div>
         </div>
       </div>
