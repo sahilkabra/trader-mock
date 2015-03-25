@@ -37,6 +37,15 @@ orderModule.controller('OrderController',
     code: 'GBP/USD'
   }];
 
+  $scope.status = {
+    isopen: false,
+    dateOpen: false
+  };
+
+  $scope.opendate = function() {
+    $scope.status.dateOpen = true;
+  };
+
   $scope.order = {
     market: $scope.currencyPairs[0],
     type: 'limit',
@@ -44,6 +53,10 @@ orderModule.controller('OrderController',
     units: 1,
     quote: 1.80,
     expires: new Date()
+  };
+
+  $scope.selectMarket = function(currency) {
+    $scope.order.market = currency;
   };
 
   $scope.orders = orderService.getOrders();
