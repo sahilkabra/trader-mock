@@ -1,4 +1,3 @@
-'use strict';
 var orderModule = angular.module('OrderModule', ['LocalStorageModule']);
 
 orderModule.config(['localStorageServiceProvider',
@@ -109,7 +108,7 @@ orderModule.controller('OrderController',
         units: quote.units,
         quote: currentQuote,
         expire: new Date()
-      }
+      };
     } else {
       $scope.order = {};
     }

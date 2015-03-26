@@ -1,4 +1,3 @@
-'use strict';
 var tradeModule = angular.module('TradeModule', ['OrderModule', 'QuoteModule']);
 
 tradeModule.directive('trade', function() {
